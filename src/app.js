@@ -23,6 +23,15 @@ require("./dbs/init.mongodb");
 
 // init routes
 app.use("", require("./routes"));
+
 // handling error
+app.use((error, req, res, next) => {
+  const statusCode = error.status || 500;
+  return res.status(statusCode).json({
+    status: "error",
+    code: statusCode,
+    message: error.message || "Internal server error!",
+  });
+});
 
 module.exports = app;
