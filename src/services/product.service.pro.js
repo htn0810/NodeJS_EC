@@ -7,6 +7,7 @@ const {
   electronic,
   furniture,
 } = require("../models/product.model");
+const { insertInventory } = require("../models/repositories/inventory.repo");
 const {
   findAllDraftsForShop,
   publishProductByShop,
@@ -108,19 +109,17 @@ class Product {
 
   // create new product
   async createProduct(product_id) {
-    try {
-      console.log("Creating product with ID:", product_id);
-      console.log("Data for product:", this);
-
-      const newProduct = await product.create({ ...this, _id: product_id });
-      //   const newProduct = await product.create({ product_name: "HTN" });
-
-      console.log("Product successfully created:", newProduct);
-      return newProduct;
-    } catch (error) {
-      console.error("Error in createProduct:", error);
-      throw error; // Allow the error to propagate to the caller
+    const newProduct = await product.create({ ...this, _id: product_id });
+    if (newProduct) {
+      // add product_stock in inventory collection
+      await insertInventory({
+        productId: newProduct._id,
+        shopId: this.product_shop,
+        stock: this.product_quantity,
+        location: "unknown",
+      });
     }
+    return newProduct;
   }
 
   async updateProduct(productId, bodyUpdate) {
@@ -199,7 +198,7 @@ class Furniture extends Product {
 }
 
 // register product types
-ProductFactory.registerProductType("Electronics", Electronic);
+ProductFactory.registerProductType("Electronic", Electronic);
 ProductFactory.registerProductType("Clothing", Clothing);
 ProductFactory.registerProductType("Furniture", Furniture);
 
