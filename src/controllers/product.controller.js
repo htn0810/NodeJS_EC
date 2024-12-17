@@ -22,10 +22,35 @@ class ProductController {
     }).send(res);
   };
 
+  // update product
+  updateProduct = async (req, res, next) => {
+    new SuccessResponse({
+      message: "Update product successfully!",
+      metadata: await ProductServicePro.updateProduct(
+        req.body.product_type,
+        req.params.productId,
+        {
+          ...req.body,
+          product_shop: req.user.userId,
+        }
+      ),
+    }).send(res);
+  };
+
   publishProductByShop = async (req, res, next) => {
     new SuccessResponse({
       message: "Published product successfully!",
       metadata: await ProductServicePro.publishProductByShop({
+        product_id: req.params.id,
+        product_shop: req.user.userId,
+      }),
+    }).send(res);
+  };
+
+  unpublishProductByShop = async (req, res, next) => {
+    new SuccessResponse({
+      message: "Un-published product successfully!",
+      metadata: await ProductServicePro.unpublishProductByShop({
         product_id: req.params.id,
         product_shop: req.user.userId,
       }),
@@ -53,6 +78,29 @@ class ProductController {
       message: "Get list draft products successfully!",
       metadata: await ProductServicePro.findAllPublishForShop({
         product_shop: req.user.userId,
+      }),
+    }).send(res);
+  };
+
+  getListSearchProducts = async (req, res, next) => {
+    new SuccessResponse({
+      message: "Get list draft products successfully!",
+      metadata: await ProductServicePro.searchProducts(req.params),
+    }).send(res);
+  };
+
+  findAllProducts = async (req, res, next) => {
+    new SuccessResponse({
+      message: "Get list products successfully!",
+      metadata: await ProductServicePro.findAllProducts(req.query),
+    }).send(res);
+  };
+
+  findProduct = async (req, res, next) => {
+    new SuccessResponse({
+      message: "Get product successfully!",
+      metadata: await ProductServicePro.findProduct({
+        product_id: req.params.product_id,
       }),
     }).send(res);
   };
