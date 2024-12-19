@@ -65,6 +65,11 @@ var discountSchema = new Schema(
       type: Number,
       required: true,
     },
+
+    discount_max_value: {
+      type: Number,
+    },
+
     discount_shopId: {
       type: Schema.Types.ObjectId,
       ref: "Shop",
@@ -73,7 +78,6 @@ var discountSchema = new Schema(
       type: Boolean,
       default: true,
     },
-
     discount_applies_to: {
       type: String,
       required: true,

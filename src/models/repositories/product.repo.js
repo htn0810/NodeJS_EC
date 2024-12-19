@@ -1,6 +1,7 @@
 "use strict";
 
 const { Types } = require("mongoose");
+const { convertToObjectIdMongoDb } = require("../../utils");
 const { product } = require("../product.model");
 
 const findAllDraftsForShop = async ({ query, limit, skip }) => {
@@ -97,6 +98,12 @@ const updateProductById = async ({
   });
 };
 
+const getProductById = async (productId) => {
+  return await product
+    .findOne({ _id: convertToObjectIdMongoDb(productId) })
+    .lean();
+};
+
 module.exports = {
   findAllDraftsForShop,
   findAllPublishForShop,
@@ -106,4 +113,5 @@ module.exports = {
   findAllProducts,
   findProduct,
   updateProductById,
+  getProductById,
 };
