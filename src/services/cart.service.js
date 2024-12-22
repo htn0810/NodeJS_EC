@@ -55,12 +55,22 @@ class CartService {
     const userCart = await cart.findOne({ cart_userId: userId });
     if (!userCart) {
       // create cart for user
+      console.log("Tao moi gio hang");
       return await CartService.createUserCart({ userId, product });
     }
 
-    // new co gio hang roi nhung chua co san pham thì sao?
-    console.log(userCart);
+    // new co gio hang roi nhung chua co san pham nao thì sao?
     if (!userCart.cart_products.length) {
+      userCart.cart_products.push(product);
+      return await userCart.save();
+    }
+
+    // co gio hang nhung chua co san pham vua add
+    if (
+      !userCart.cart_products.find(
+        (existProduct) => existProduct.productId === product.productId
+      )
+    ) {
       userCart.cart_products.push(product);
       return await userCart.save();
     }
