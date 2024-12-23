@@ -1,12 +1,14 @@
 const Redis = require("redis");
 
+const { REDIS_CONNECTION } = process.env;
+
 class RedisPubSubService {
   constructor() {
     this.subscriber = Redis.createClient({
-      url: "redis://default:PeIfKV05vcOefbfDHfExVA0V0aIvEtWp@redis-16712.c292.ap-southeast-1-1.ec2.redns.redis-cloud.com:16712",
+      url: REDIS_CONNECTION,
     });
     this.publisher = Redis.createClient({
-      url: "redis://default:PeIfKV05vcOefbfDHfExVA0V0aIvEtWp@redis-16712.c292.ap-southeast-1-1.ec2.redns.redis-cloud.com:16712",
+      url: REDIS_CONNECTION,
     });
     this.subscriber.connect();
     this.publisher.connect();
