@@ -16,6 +16,11 @@ app.use(
   })
 );
 
+// test pub sub service
+require("./tests/inventory.test");
+const productTest = require("./tests/product.test");
+productTest.purchaseProduct().then();
+
 // init db
 require("./dbs/init.mongodb");
 
