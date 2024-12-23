@@ -2,6 +2,7 @@
 
 const { NotFoundError, BadRequestError } = require("../core/error.response");
 const { cart } = require("../models/cart.model");
+const { order } = require("../models/order.model");
 const { findCartById } = require("../models/repositories/cart.repo");
 const { checkProductByServer } = require("../models/repositories/product.repo");
 const { getDiscountAmount } = require("./discount.service");
@@ -156,9 +157,37 @@ class CheckoutService {
       );
     }
 
-    const newOrder = order.create();
+    const newOrder = order.create({
+      order_userId: userId,
+      order_checkout: checkout_order,
+      order_shipping: user_address,
+      order_payment: user_payment,
+      order_products: shop_order_ids_new,
+    });
+
+    // truong hop: new insert thanh cong, thi remove product co trong cart
+    if (newOrder) {
+      // Remove product in my cart
+    }
     return newOrder;
   }
+
+  /**
+   * 1. Query order [Users]
+   */
+  static async getOrdersByUser() {}
+  /**
+   * 2. Query order using Id [Users]
+   */
+  static async getOneOrderByUser() {}
+  /**
+   * 3. Cancel order [Users]
+   */
+  static async cancelOrderByUser() {}
+  /**
+   * 4. Update order status [Admin/Shop]
+   */
+  static async updateOrderStatusByShop() {}
 }
 
 module.exports = CheckoutService;
